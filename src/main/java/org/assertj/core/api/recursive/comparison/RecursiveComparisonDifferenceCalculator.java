@@ -144,11 +144,16 @@ public class RecursiveComparisonDifferenceCalculator {
       // - dualValuesToCompare = {a'}
       // dualValuesToCompare.removeAll(visitedDualValues) would remove it which is incorrect
       // If we compare references then a' won't be removed from dualValuesToCompare
-      System.out.println("visitedDualValues " + visitedDualValues);
-      System.out.println("dualValuesToCompare before removing visitedDualValues " + dualValuesToCompare);
+      System.out.println("visitedDualValues:" + visitedDualValues);
+      System.out.println("dualValuesToCompare before removing visitedDualValues : " + dualValuesToCompare);
       visitedDualValues.forEach(visited -> dualValuesToCompare.removeIf(toCompare -> toCompare == visited));
-      System.out.println("dualValuesToCompare after removing visitedDualValues " + dualValuesToCompare);
+      System.out.println("dualValuesToCompare after removing visitedDualValues  : " + dualValuesToCompare);
     }
+
+    // private void printIds(DualValue visited) {
+    // System.out.println(format("- id of actual %s / expected %s ", id(visited.actual),
+    // id(visited.expected)));
+    // }
 
     private boolean mustCompareFieldsRecursively(boolean isRootObject, DualValue dualValue) {
       boolean noCustomComparisonForDualValue = !recursiveComparisonConfiguration.hasCustomComparator(dualValue)
@@ -409,8 +414,9 @@ public class RecursiveComparisonDifferenceCalculator {
     List<String> path = dualValue.getPath();
     // copy expected as we will remove elements found in actual
     Collection<?> expectedCopy = new LinkedList<>(toCollection(expected));
-    System.out.println("------------------------------");
-    System.out.println("compare actual " + actual + " vs expected " + expected);
+    System.out.println("------- path compared --- " + dualValue.getConcatenatedPath());
+    System.out.println("compare actual " + actual);
+    System.out.println("vs    expected " + expected);
     System.out.println("expectedCopy " + expectedCopy);
     for (Object actualElement : actual) {
       // compare recursively actualElement to all remaining expected elements
@@ -418,7 +424,8 @@ public class RecursiveComparisonDifferenceCalculator {
       while (expectedIterator.hasNext()) {
         Object expectedElement = expectedIterator.next();
         // we need to get the currently visited dual values otherwise a cycle would cause an infinite recursion.
-        System.out.println("compare actual element " + actualElement + " vs expected element " + expectedElement);
+        System.out.println("compare actual element " + actualElement);
+        System.out.println("   vs expected element " + expectedElement);
         List<ComparisonDifference> differences = determineDifferences(actualElement, expectedElement, path, false,
                                                                       comparisonState.visitedDualValues,
                                                                       comparisonState.recursiveComparisonConfiguration);

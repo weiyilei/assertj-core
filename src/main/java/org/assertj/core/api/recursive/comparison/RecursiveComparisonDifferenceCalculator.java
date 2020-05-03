@@ -144,7 +144,14 @@ public class RecursiveComparisonDifferenceCalculator {
       // - dualValuesToCompare = {a'}
       // dualValuesToCompare.removeAll(visitedDualValues) would remove it which is incorrect
       // If we compare references then a' won't be removed from dualValuesToCompare
-      visitedDualValues.forEach(visited -> dualValuesToCompare.removeIf(toCompare -> toCompare == visited));
+      visitedDualValues.forEach(visited -> {
+        // remove visited values one by one, thus not using removeIf which would remove all matching values:
+        // dualValuesToCompare.removeIf(toCompare -> toCompare == visited)
+        dualValuesToCompare.stream()
+                           .filter(toCompare -> toCompare == visited)
+                           .findFirst()
+                           .ifPresent(dualValuesToCompare::remove);
+      });
     }
 
     private boolean mustCompareFieldsRecursively(boolean isRootObject, DualValue dualValue) {

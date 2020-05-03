@@ -240,6 +240,9 @@ public class RecursiveComparisonAssert_isEqualTo_Test extends RecursiveCompariso
     FriendlyPerson sherlock = new FriendlyPerson();
     sherlock.name = "Sherlock";
     sherlock.home.address.number = 221;
+    FriendlyPerson watson = new FriendlyPerson();
+    watson.name = "Watson";
+    watson.home.address.number = 221;
 
     // ordered collections
     actual.friends.add(sherlock);
@@ -252,9 +255,15 @@ public class RecursiveComparisonAssert_isEqualTo_Test extends RecursiveCompariso
     actual.otherFriends.add(actual);
     actual.otherFriends.add(expected);
     actual.otherFriends.add(sherlock);
+    actual.otherFriends.add(watson);
+
     expected.otherFriends.add(sherlock);
     expected.otherFriends.add(expected);
     expected.otherFriends.add(actual);
+    expected.otherFriends.add(watson);
+
+    watson.otherFriends.add(sherlock);
+    sherlock.otherFriends.add(watson);
 
     // THEN
     assertThat(actual).usingRecursiveComparison()

@@ -144,7 +144,10 @@ public class RecursiveComparisonDifferenceCalculator {
       // - dualValuesToCompare = {a'}
       // dualValuesToCompare.removeAll(visitedDualValues) would remove it which is incorrect
       // If we compare references then a' won't be removed from dualValuesToCompare
+      System.out.println("visitedDualValues " + visitedDualValues);
+      System.out.println("dualValuesToCompare before removing visitedDualValues " + dualValuesToCompare);
       visitedDualValues.forEach(visited -> dualValuesToCompare.removeIf(toCompare -> toCompare == visited));
+      System.out.println("dualValuesToCompare after removing visitedDualValues " + dualValuesToCompare);
     }
 
     private boolean mustCompareFieldsRecursively(boolean isRootObject, DualValue dualValue) {
@@ -406,12 +409,16 @@ public class RecursiveComparisonDifferenceCalculator {
     List<String> path = dualValue.getPath();
     // copy expected as we will remove elements found in actual
     Collection<?> expectedCopy = new LinkedList<>(toCollection(expected));
+    System.out.println("------------------------------");
+    System.out.println("compare actual " + actual + " vs expected " + expected);
+    System.out.println("expectedCopy " + expectedCopy);
     for (Object actualElement : actual) {
       // compare recursively actualElement to all remaining expected elements
       Iterator<?> expectedIterator = expectedCopy.iterator();
       while (expectedIterator.hasNext()) {
         Object expectedElement = expectedIterator.next();
         // we need to get the currently visited dual values otherwise a cycle would cause an infinite recursion.
+        System.out.println("compare actual element " + actualElement + " vs expected element " + expectedElement);
         List<ComparisonDifference> differences = determineDifferences(actualElement, expectedElement, path, false,
                                                                       comparisonState.visitedDualValues,
                                                                       comparisonState.recursiveComparisonConfiguration);
@@ -420,9 +427,12 @@ public class RecursiveComparisonDifferenceCalculator {
           // it means for each actual element there is one and only matching expected element.
           expectedIterator.remove();
           // jump to next actual element check
+          System.out.println("expectedCopy " + expectedCopy);
           break;
         }
+        System.out.println("expectedCopy " + expectedCopy);
       }
+      System.out.println(" ");
     }
 
     // expectedCopy not empty = there was at least one actual element not matching any expected elements.

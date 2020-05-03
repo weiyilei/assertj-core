@@ -145,7 +145,7 @@ public class RecursiveComparisonDifferenceCalculator {
       // dualValuesToCompare.removeAll(visitedDualValues) would remove it which is incorrect
       // If we compare references then a' won't be removed from dualValuesToCompare
       visitedDualValues.forEach(visited -> {
-        // remove visited values one by one, thus not using removeIf which would remove all matching values:
+        // remove visited values one by one, thus not using removeIf which would remove all matching values with:
         // dualValuesToCompare.removeIf(toCompare -> toCompare == visited)
         dualValuesToCompare.stream()
                            .filter(toCompare -> toCompare == visited)
